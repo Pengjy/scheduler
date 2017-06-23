@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package scheduler;
+
+option java_package = "com.ivollo.scheduler.config";
+option java_outer_classname = "ConfigProto";
+message config{
+    required string opreation = 1;
+    required string jobName = 2;
+    required string beanName = 3;
+    required string cron = 4;
+}
