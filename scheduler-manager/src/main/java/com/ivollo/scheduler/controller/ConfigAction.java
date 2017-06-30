@@ -1,11 +1,12 @@
 package com.ivollo.scheduler.controller;
 
 import com.ivollo.scheduler.constant.Operations;
+import com.ivollo.scheduler.entity.JobDetail;
 import com.ivollo.scheduler.service.ConfigurationService;
+import com.ivollo.scheduler.service.JobDetailService;
 import com.ivollo.scheduler.vo.ConfigVO;
 import com.ivollo.scheduler.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
@@ -26,20 +27,27 @@ public class ConfigAction {
     private ConfigurationService configurationService;
 
     @Autowired
-    private MongoOperations mongoOperations;
+    private JobDetailService jobDetailService;
 
     @RequestMapping("/")
-    public String index(ModelAndView modelAndView){
-        List<ConfigVO> configVOList = mongoOperations.findAll(ConfigVO.class);
-        modelAndView.addObject("datas",configVOList);
-        return "index";
+    public ModelAndView index(){
+        List<JobDetail> jobDetails = jobDetailService.listJobs();
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("datas",jobDetails);
+
+        return modelAndView;
     }
 
     @RequestMapping("/add")
     @ResponseBody
     public Result<Boolean> add(ConfigVO configVO){
         configVO.setOperation(Operations.ADD);
-        mongoOperations.save(configVO);
+
+        JobDetail jobDetail = new JobDetail();
+        jobDetail.setJobName(configVO.getJobName());
+        jobDetail.setBeanName(configVO.getBeanName());
+        jobDetail.setCron(configVO.getCron());
+        jobDetailService.addJob(jobDetail);
 
         configurationService.config(configVO);
 
@@ -53,10 +61,8 @@ public class ConfigAction {
     @ResponseBody
     public Result<Boolean> del(ConfigVO configVO){
         configVO.setOperation(Operations.DEL);
-        Criteria criteria = Criteria.where("jobName").is(configVO.getJobName());
-        ConfigVO configDBObj = mongoOperations.findOne(Query.query(criteria),ConfigVO.class);
-        mongoOperations.remove(configDBObj);
 
+        jobDetailService.delJob(configVO.getJobName());
         configurationService.config(configVO);
 
         Result<Boolean> result = new Result<>();
@@ -70,10 +76,10 @@ public class ConfigAction {
     public Result<Boolean> modify(ConfigVO configVO){
         configVO.setOperation(Operations.MODIFY);
 
-        Criteria criteria = Criteria.where("jobName").is(configVO.getJobName());
-        ConfigVO configDBObj = mongoOperations.findOne(Query.query(criteria),ConfigVO.class);
-        configDBObj.setCron(configVO.getCron());
-        mongoOperations.save(configDBObj);
+//        Criteria criteria = Criteria.where("jobName").is(configVO.getJobName());
+//        ConfigVO configDBObj = mongoOperations.findOne(Query.query(criteria),ConfigVO.class);
+//        configDBObj.setCron(configVO.getCron());
+//        mongoOperations.save(configDBObj);
 
         configurationService.config(configVO);
 

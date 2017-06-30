@@ -22,6 +22,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <druid_version>1.0.18</druid_version>
+        <mariadb-java-client_version>1.3.3</mariadb-java-client_version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>com.ivollo</groupId>
@@ -32,6 +37,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>4.1.7.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>4.1.7.RELEASE</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
@@ -52,6 +64,16 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
             <version>1.6.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${druid_version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${mariadb-java-client_version}</version>
         </dependency>
     </dependencies>
 

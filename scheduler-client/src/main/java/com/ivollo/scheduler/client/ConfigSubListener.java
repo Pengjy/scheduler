@@ -29,18 +29,18 @@ public class ConfigSubListener implements MessageListener ,ApplicationContextAwa
         try {
             ConfigProto.config config = ConfigProto.config.parseFrom(message.getBody());
             if(Operations.ADD.equals(config.getOpreation())){
-                quartzManager.addJob(SchedulerUtils.loadScheduler(), config.getJobName(),findBeanClass(config.getBeanName()),config.getCron());
+                quartzManager.addJob(config.getJobName(),config.getBeanName(),config.getCron());
             }else if(Operations.DEL.equals(config.getOpreation())){
-                quartzManager.removeJob(SchedulerUtils.loadScheduler(),config.getJobName());
+                 quartzManager.delJob(config.getJobName());
             }else if(Operations.MODIFY.equals(config.getOpreation())){
-                quartzManager.modifyJobTime(SchedulerUtils.loadScheduler(),config.getJobName(),config.getCron());
+                //quartzManager.modifyJobTime(SchedulerUtils.loadScheduler(),config.getJobName(),config.getCron());
             }
         } catch (InvalidProtocolBufferException e) {
         }
     }
 
-    private Class findBeanClass(String beanName){
-        return applicationContext.getBean(beanName).getClass();
+    private Object findBeanClass(String beanName){
+        return applicationContext.getBean(beanName);
     }
 
     @Override

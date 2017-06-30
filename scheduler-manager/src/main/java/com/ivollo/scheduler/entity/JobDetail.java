@@ -1,18 +1,16 @@
-package com.ivollo.scheduler.vo;
+package com.ivollo.scheduler.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-
 /**
- * Created by Administrator on 2017/6/23.
+ * Created by Administrator on 2017/6/29.
  */
-public class ConfigVO implements Serializable{
+@Document(collection = "jobdetail")
+public class JobDetail {
 
-    private static final long serialVersionUID = -4408230358553620429L;
-
-    private String operation;
+    @Id
+    private String id;
 
     private String jobName;
 
@@ -20,12 +18,12 @@ public class ConfigVO implements Serializable{
 
     private String cron;
 
-    public String getOperation() {
-        return operation;
+    public String getId() {
+        return id;
     }
 
-    public void setOperation(String operation) {
-        this.operation = operation;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getJobName() {
