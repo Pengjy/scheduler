@@ -1,2 +1,2 @@
 # scheduler
-# 基于quartz实现动态可配置任务调度
+# 基于quartz实现动态配置任务
